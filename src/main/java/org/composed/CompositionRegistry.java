@@ -13,15 +13,21 @@ class CompositionRegistry {
     }
 
     void register(Composition comp) {
+        check();
         this.compositions.add(comp);
     }
 
     Composition get(Object o) {
+        check();
         return this.compositions.stream()
                 .filter(c -> c.wrapped() == o)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Cannot get composition for object\"%s.\" No registered composition!"
                         .formatted(o)));
+    }
+
+    private void check() {
+        this.compositions.removeIf(c -> c.wrapped() == null);
     }
 
     static CompositionRegistry inst() {

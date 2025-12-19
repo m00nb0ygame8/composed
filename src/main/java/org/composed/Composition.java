@@ -1,14 +1,15 @@
 package org.composed;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Composition {
     private final List<ExtensionEntry<?>> extensionEntries;
-    private final Object object;
+    private final WeakReference<Object> object;
 
     public Composition(Object o) {
-        this.object = o;
+        this.object = new WeakReference<>(o);
         this.extensionEntries = new ArrayList<>();
         CompositionRegistry.inst().register(this);
     }
@@ -44,7 +45,7 @@ public class Composition {
     }
 
     public Object wrapped() {
-        return object;
+        return object.get();
     }
 
     public record ExtensionEntry<T extends Extension>(Class<T> type, T extension) {}
