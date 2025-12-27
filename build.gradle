@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'org.composed'
+version = '1.0.0-24'
 
 repositories {
     mavenCentral()
@@ -17,4 +18,30 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+def target = 24
+java {
+    def jv =JavaVersion.toVersion(target)
+    sourceCompatibility = jv
+    targetCompatibility = jv
+    if (JavaVersion.current() < jv) {
+        toolchain.languageVersion = JavaLanguageVersion.of(target)
+    }
+
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GithubPages"
+            url = uri("${project.rootDir}/maven")
+        }
+    }
 }
