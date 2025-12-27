@@ -8,7 +8,7 @@ public class Composition {
     private final List<ExtensionEntry<?>> extensionEntries;
     private final WeakReference<Object> object;
 
-    public Composition(Object o) {
+    private Composition(Object o) {
         this.object = new WeakReference<>(o);
         this.extensionEntries = new ArrayList<>();
         CompositionRegistry.inst().register(this);
@@ -43,9 +43,18 @@ public class Composition {
                )
                .extension();
     }
+    public <T extends Extension> boolean has(Class<T> type) {
+        return  this.extensionEntries.stream().map(ExtensionEntry::type)
+                .anyMatch(t -> t.equals(type));
+    }
 
     public Object wrapped() {
         return object.get();
+    }
+
+    public static Composition of(Object o) {
+        if(!CompositionRegistry.inst().has(o)) return new Composition(o);
+        else return CompositionRegistry.inst().get(o);
     }
 
     public record ExtensionEntry<T extends Extension>(Class<T> type, T extension) {}

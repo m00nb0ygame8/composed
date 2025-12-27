@@ -26,6 +26,11 @@ class CompositionRegistry {
                         .formatted(o)));
     }
 
+    boolean has(Object o) {
+        return this.compositions.stream()
+                .anyMatch(c -> c.wrapped() == o);
+    }
+
     private void check() {
         this.compositions.removeIf(c -> c.wrapped() == null);
     }
