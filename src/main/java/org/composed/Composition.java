@@ -57,5 +57,9 @@ public class Composition {
         else return CompositionRegistry.inst().get(o);
     }
 
+    public static boolean hasComposition(Object o) {
+        return CompositionRegistry.inst().has(o);
+    }
+
     public record ExtensionEntry<T extends Extension>(Class<T> type, T extension) {}
 }
