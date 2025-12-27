@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'org.composed'
-version = '1.0.1-242'
+version = '1.0.1-243'
 
 repositories {
     mavenCentral()

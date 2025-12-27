@@ -6,6 +6,11 @@ public record ComposedExtension<T extends Extension>(Class<T> type) {
         return comp.get(this.type);
     }
 
+    public boolean has(Object o) {
+        Composition comp = CompositionRegistry.inst().get(o);
+        return comp.has(this.type);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends Extension> ComposedExtension<T> of(T extension) {
         Class<T> type = (Class<T>) extension.getClass();
