@@ -2,7 +2,7 @@ package org.composed;
 
 public record ComposedExtension<T extends Extension>(Class<T> type) {
     public T get(Object o) {
-        Composition comp = CompositionRegistry.inst().get(o);
+        Composition comp = Composition.of(o);
         return comp.get(this.type);
     }
 
