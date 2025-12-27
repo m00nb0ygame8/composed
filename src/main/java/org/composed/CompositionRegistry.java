@@ -26,7 +26,7 @@ class CompositionRegistry {
                         .formatted(o)));
     }
 
-    boolean has(Object o) {
+    public boolean has(Object o) {
         return this.compositions.stream()
                 .anyMatch(c -> c.wrapped() == o);
     }
@@ -35,7 +35,7 @@ class CompositionRegistry {
         this.compositions.removeIf(c -> c.wrapped() == null);
     }
 
-    static CompositionRegistry inst() {
+    public static CompositionRegistry inst() {
         if(inst == null) inst = new CompositionRegistry();
         return inst;
     }
