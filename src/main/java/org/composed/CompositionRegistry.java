@@ -1,38 +1,28 @@
 package org.composed;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 class CompositionRegistry {
     private static CompositionRegistry inst;
 
-    private final List<Composition> compositions;
+    private final Map<Object, Composition> compositions;
 
     private CompositionRegistry() {
-        this.compositions = new ArrayList<>();
+        this.compositions = new WeakHashMap<>();
     }
 
     void register(Composition comp) {
-        check();
-        this.compositions.add(comp);
+        this.compositions.put(comp.wrapped(), comp);
     }
 
     Composition get(Object o) {
-        check();
-        return this.compositions.stream()
-                .filter(c -> c.wrapped() == o)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Cannot get composition for object\"%s.\" No registered composition!"
-                        .formatted(o)));
+        Composition comp = this.compositions.get(o);
+        if(comp == null) throw new IllegalArgumentException("Cannot get composition for object\"%s.\" No registered composition!".formatted(o));
+        return this.compositions.get(o);
     }
 
     boolean has(Object o) {
-        return this.compositions.stream()
-                .anyMatch(c -> c.wrapped() == o);
-    }
-
-    void check() {
-        this.compositions.removeIf(c -> c.wrapped() == null);
+        return this.compositions.containsKey(o);
     }
 
     public static CompositionRegistry inst() {
